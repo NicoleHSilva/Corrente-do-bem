@@ -79,7 +79,7 @@ class PostAdapter(
 
     private fun ilustracaoDe(nome: String?): Int? = when (nome) {
         "res:praia" -> R.drawable.ilustracao_praia
-        "res:mutirao" -> R.drawable.ilustracao_multirao
+        "res:mutirao" -> R.drawable.ilustracao_mutirao
         "res:reciclagem" -> R.drawable.ilustracao_reciclagem
         else -> null
     }
