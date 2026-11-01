@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="verde_claro">#1F4D24</color>
+    <color name="ciano_claro">#0E4B54</color>
+    <color name="fundo">#101A12</color>
+    <color name="superficie">#1B2A1E</color>
+    <color name="texto_principal">#E8F5E9</color>
+    <color name="texto_secundario">#A5BFA7</color>
+    <color name="icone">#81C784</color>
+    <color name="icone_ciano">#4DD0E1</color>
+</resources>

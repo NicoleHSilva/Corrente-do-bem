@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="TituloHeader">
+        <item name="android:textColor">@color/branco</item>
+        <item name="android:textSize">@dimen/texto_titulo</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="SubtituloHeader">
+        <item name="android:textColor">@color/ciano_suave</item>
+        <item name="android:textSize">@dimen/texto_subtitulo</item>
+    </style>
+
+    <style name="TituloCard">
+        <item name="android:textColor">@color/texto_principal</item>
+        <item name="android:textSize">@dimen/texto_card_titulo</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextoCorpo">
+        <item name="android:textColor">@color/texto_secundario</item>
+        <item name="android:textSize">@dimen/texto_corpo</item>
+        <item name="android:lineSpacingExtra">2dp</item>
+    </style>
+
+    <style name="CardEco" parent="Widget.Material3.CardView.Elevated">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="cardCornerRadius">@dimen/raio_card</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardBackgroundColor">@color/superficie</item>
+    </style>
+
+    <style name="IconeCard">
+        <item name="android:layout_width">@dimen/icone_card</item>
+        <item name="android:layout_height">@dimen/icone_card</item>
+        <item name="android:padding">14dp</item>
+    </style>
+
+    <style name="CheckMeta" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:textColor">@color/texto_principal</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="BotaoEco" parent="Widget.Material3.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textColor">@color/branco</item>
+        <item name="backgroundTint">@color/ciano_escuro</item>
+        <item name="cornerRadius">16dp</item>
+    </style>
+
+    <style name="BotaoVoltar" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:textColor">@color/icone_ciano</item>
+        <item name="strokeColor">@color/icone_ciano</item>
+        <item name="cornerRadius">16dp</item>
+    </style>
+
+    <style name="FotoRedonda">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+</resources>

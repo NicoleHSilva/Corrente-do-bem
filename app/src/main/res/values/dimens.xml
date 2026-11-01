@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margem_tela">20dp</dimen>
+    <dimen name="raio_card">20dp</dimen>
+    <dimen name="icone_card">56dp</dimen>
+    <dimen name="texto_titulo">28sp</dimen>
+    <dimen name="texto_subtitulo">15sp</dimen>
+    <dimen name="texto_card_titulo">18sp</dimen>
+    <dimen name="texto_corpo">15sp</dimen>
+</resources>

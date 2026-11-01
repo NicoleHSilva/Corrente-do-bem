@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Corrente do Bem</string>
+
+    <string name="home_titulo">Corrente do Bem</string>
+    <string name="home_subtitulo">Pequenas atitudes, grandes mudanças para o planeta</string>
+    <string name="home_secao">Explore o app</string>
+    <string name="modo_escuro">Modo escuro</string>
+    <string name="desc_planeta">Ilustração do planeta Terra com oceanos e florestas</string>
+    <string name="desc_icone">Ícone decorativo</string>
+
+    <string name="card_dicas_titulo">Dicas Sustentáveis</string>
+    <string name="card_dicas_desc">Água, energia, lixo e consumo no dia a dia</string>
+    <string name="card_metas_titulo">Minhas Metas</string>
+    <string name="card_metas_desc">Marque as ações ecológicas que você cumpriu hoje</string>
+    <string name="sabia_titulo">Você sabia?</string>
+    <string name="sabia_texto">O descarte incorreto de lixo entope bueiros e rios e é uma das causas das enchentes nas cidades. Cada atitude conta!</string>
+    <string name="rodape">Projeto acadêmico de Sustentabilidade</string>
+
+    <string name="dicas_titulo">Dicas Sustentáveis</string>
+    <string name="dicas_subtitulo">Pequenos hábitos que cuidam do planeta</string>
+    <string name="dica_agua_titulo">Economize água</string>
+    <string name="dica_agua_texto">Feche a torneira ao escovar os dentes e prefira banhos de até 5 minutos.</string>
+    <string name="dica_energia_titulo">Poupe energia</string>
+    <string name="dica_energia_texto">Apague as luzes ao sair do cômodo e troque lâmpadas comuns por LED.</string>
+    <string name="dica_lixo_titulo">Descarte corretamente</string>
+    <string name="dica_lixo_texto">Separe o lixo reciclável do orgânico e nunca descarte resíduos em ruas, rios ou praias.</string>
+    <string name="dica_consumo_titulo">Consuma com consciência</string>
+    <string name="dica_consumo_texto">Reutilize sacolas e garrafas e compre apenas o que realmente precisa.</string>
+
+    <string name="metas_titulo">Minhas Metas</string>
+    <string name="metas_subtitulo">Quantas ações sustentáveis você fez hoje?</string>
+    <string name="progresso_metas">%1$d de %2$d metas cumpridas</string>
+    <string name="msg_continue">Continue assim, cada meta ajuda o planeta!</string>
+    <string name="msg_parabens">Parabéns! Você cumpriu todas as metas de hoje!</string>
+    <string name="meta_1">Fechei a torneira ao escovar os dentes</string>
+    <string name="meta_2">Apaguei as luzes ao sair do cômodo</string>
+    <string name="meta_3">Separei o lixo reciclável</string>
+    <string name="meta_4">Usei sacola ou garrafa reutilizável</string>
+    <string name="meta_5">Descartei o lixo no lugar correto</string>
+    <string name="btn_reiniciar">Reiniciar metas</string>
+    <string name="btn_voltar">Voltar</string>
+
+    <string name="nav_inicio">Início</string>
+    <string name="nav_mapa">Mapa</string>
+    <string name="nav_feed">Feed</string>
+    <string name="nav_perfil">Perfil</string>
+
+    <string name="banner_pontos">%1$d pontos precisando de ajuda - %2$d já limpos</string>
+    <string name="banner_adicionar">Toque no mapa para escolher o local do ponto</string>
+    <string name="btn_add_ponto">Adicionar ponto</string>
+    <string name="btn_cancelar">Cancelar</string>
+    <string name="novo_ponto_titulo">Novo ponto de lixo</string>
+    <string name="hint_titulo_ponto">Local (ex.: Rua das Flores, 120)</string>
+    <string name="hint_desc_ponto">O que precisa ser retirado? (tipo e quantidade)</string>
+    <string name="salvar">Salvar</string>
+    <string name="erro_titulo">Informe o local</string>
+    <string name="status_pendente">Precisa de ajuda</string>
+    <string name="status_limpo">Já foi limpo</string>
+    <string name="detalhe_status">Situação: %1$s\nMarcado em %2$s</string>
+    <string name="marcar_limpo">Marcar como limpo</string>
+    <string name="reabrir">Reabrir ponto</string>
+    <string name="remover">Remover</string>
+    <string name="fechar">Fechar</string>
+
+    <string name="feed_titulo">Feed da Comunidade</string>
+    <string name="feed_subtitulo">Compartilhe fotos e comentários sobre a limpeza</string>
+    <string name="hint_post">Conte o que você viu ou fez...</string>
+    <string name="btn_foto">Foto</string>
+    <string name="btn_publicar">Publicar</string>
+    <string name="feed_vazio">Nenhuma publicação ainda.\nSeja o primeiro a compartilhar!</string>
+    <string name="post_vazio_erro">Escreva algo ou escolha uma foto</string>
+    <string name="excluir_post_titulo">Excluir publicação?</string>
+    <string name="excluir">Excluir</string>
+    <string name="autor_padrao">Voluntário(a)</string>
+    <string name="desc_foto_post">Foto da publicação</string>
+
+    <string name="perfil_nome_padrao">Seu nome</string>
+    <string name="perfil_bio_padrao">Conte um pouco sobre você</string>
+    <string name="hint_nome">Nome</string>
+    <string name="hint_bio">Sobre mim</string>
+    <string name="btn_escolher_foto">Escolher foto</string>
+    <string name="btn_salvar_perfil">Salvar perfil</string>
+    <string name="perfil_salvo">Perfil salvo!</string>
+    <string name="contrib_pontos">pontos marcados</string>
+    <string name="contrib_posts">publicações</string>
+    <string name="desc_avatar">Foto do perfil</string>
+</resources>
