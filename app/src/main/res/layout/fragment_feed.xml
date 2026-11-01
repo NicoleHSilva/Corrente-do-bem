@@ -1,114 +1,234 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_header"
-        android:orientation="vertical"
-        android:paddingStart="@dimen/margem_tela"
-        android:paddingTop="24dp"
-        android:paddingEnd="@dimen/margem_tela"
-        android:paddingBottom="24dp">
-
-        <TextView
-            style="@style/TituloHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/feed_titulo" />
-
-        <TextView
-            style="@style/SubtituloHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="@string/feed_subtitulo" />
-    </LinearLayout>
-
-    <com.google.android.material.card.MaterialCardView
-        style="@style/CardEco"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="0dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/bg_header"
             android:orientation="vertical"
-            android:padding="12dp">
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_post">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtPost"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textMultiLine|textCapSentences"
-                    android:minLines="2" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <ImageView
-                android:id="@+id/imgPrevia"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:layout_marginTop="8dp"
-                android:contentDescription="@string/desc_foto_post"
-                android:scaleType="centerCrop"
-                android:visibility="gone" />
+            android:paddingStart="20dp"
+            android:paddingTop="24dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="24dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:contentDescription="@string/desc_planeta"
+                    android:src="@drawable/ilustracao_planeta" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TituloHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/home_titulo"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        style="@style/SubtituloHeader"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/feed_subtitulo" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btnFotoPost"
-                    style="@style/BotaoVoltar"
+                    android:id="@+id/btnAtalhoDicas"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="0dp"
+                    android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:text="@string/btn_foto"
-                    app:icon="@drawable/ic_foto"
-                    app:iconTint="@color/icone_ciano" />
+                    android:text="@string/atalho_dicas"
+                    android:textColor="@color/texto_principal"
+                    app:backgroundTint="@color/superficie"
+                    app:icon="@drawable/ic_folha"
+                    app:iconTint="@color/icone" />
 
                 <Button
-                    android:id="@+id/btnPublicar"
-                    style="@style/BotaoEco"
+                    android:id="@+id/btnAtalhoMetas"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     android:layout_width="0dp"
+                    android:layout_height="48dp"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    android:text="@string/btn_publicar" />
+                    android:text="@string/atalho_metas"
+                    android:textColor="@color/texto_principal"
+                    app:backgroundTint="@color/superficie"
+                    app:icon="@drawable/ic_reciclar"
+                    app:iconTint="@color/icone_ciano" />
             </LinearLayout>
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        <com.google.android.material.card.MaterialCardView
+            style="@style/CardEco"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="0dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="6dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="6dp"
+                    android:background="@drawable/bg_faixa" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        style="@style/TituloCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/compose_titulo" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/imgAvatarComposer"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@color/verde_claro"
+                            android:contentDescription="@string/desc_avatar"
+                            android:padding="10dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_pessoa"
+                            android:tint="@color/icone"
+                            app:shapeAppearanceOverlay="@style/FotoRedonda" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            app:boxBackgroundColor="@color/fundo_base"
+                            app:boxCornerRadiusBottomEnd="20dp"
+                            app:boxCornerRadiusBottomStart="20dp"
+                            app:boxCornerRadiusTopEnd="20dp"
+                            app:boxCornerRadiusTopStart="20dp"
+                            app:boxStrokeColor="@color/ciano_primario"
+                            app:hintEnabled="false">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edtPost"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="top|start"
+                                android:hint="@string/hint_post_novo"
+                                android:inputType="textMultiLine|textCapSentences"
+                                android:minLines="3"
+                                android:textSize="15sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/imgPrevia"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginTop="12dp"
+                        android:contentDescription="@string/desc_foto_post"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/ciano_claro" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnFotoPost"
+                            style="@style/Widget.Material3.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="44dp"
+                            android:text="@string/btn_foto"
+                            android:textColor="@color/icone_ciano"
+                            app:icon="@drawable/ic_foto"
+                            app:iconTint="@color/icone_ciano" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:id="@+id/btnPublicar"
+                            style="@style/BotaoEco"
+                            android:layout_width="wrap_content"
+                            android:layout_height="44dp"
+                            android:layout_marginTop="0dp"
+                            android:paddingStart="28dp"
+                            android:paddingEnd="28dp"
+                            android:text="@string/btn_publicar" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listaPosts"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:overScrollMode="never"
             android:padding="16dp" />
 
         <TextView
             android:id="@+id/txtVazio"
             style="@style/TextoCorpo"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:gravity="center"
+            android:padding="24dp"
             android:text="@string/feed_vazio" />
-    </FrameLayout>
-</LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

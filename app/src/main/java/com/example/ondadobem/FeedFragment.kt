@@ -1,5 +1,6 @@
 package com.example.ondadobem
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -8,10 +9,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputEditText
 
 class FeedFragment : Fragment(R.layout.fragment_feed) {
@@ -51,6 +54,21 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         lista.adapter = adapter
         atualizarVazio()
 
+        view.findViewById<Button>(R.id.btnAtalhoDicas).setOnClickListener {
+            startActivity(Intent(ctx, DicasActivity::class.java))
+        }
+        view.findViewById<Button>(R.id.btnAtalhoMetas).setOnClickListener {
+            startActivity(Intent(ctx, MetasActivity::class.java))
+        }
+
+        val avatar = view.findViewById<ShapeableImageView>(R.id.imgAvatarComposer)
+        val fotoPerfil = Armazenamento.perfil(ctx).foto
+        if (fotoPerfil != null) {
+            avatar.imageTintList = null
+            avatar.setPadding(0, 0, 0, 0)
+            Imagens.carregar(avatar, fotoPerfil, 200)
+        }
+
         view.findViewById<Button>(R.id.btnFotoPost).setOnClickListener {
             escolherFoto.launch(
                 PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
@@ -70,7 +88,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         val agora = System.currentTimeMillis()
         posts.add(0, Post(agora, autor, texto, fotoPendente, agora))
         adapter.notifyItemInserted(0)
-        lista.scrollToPosition(0)
+        (requireView() as NestedScrollView).smoothScrollTo(0, 0)
         Armazenamento.salvarPosts(ctx, posts)
 
         edtPost.text?.clear()

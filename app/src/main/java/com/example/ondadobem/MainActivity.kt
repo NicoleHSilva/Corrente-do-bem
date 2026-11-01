@@ -15,9 +15,8 @@ class MainActivity : AppCompatActivity() {
         menu.setOnItemSelectedListener { item ->
             val tela: Fragment = when (item.itemId) {
                 R.id.nav_mapa -> MapaFragment()
-                R.id.nav_feed -> FeedFragment()
                 R.id.nav_perfil -> PerfilFragment()
-                else -> HomeFragment()
+                else -> FeedFragment()
             }
             supportFragmentManager.beginTransaction()
                 .replace(R.id.container, tela)
@@ -26,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (savedInstanceState == null) {
-            menu.selectedItemId = R.id.nav_inicio
+            menu.selectedItemId = R.id.nav_feed
         }
     }
 }

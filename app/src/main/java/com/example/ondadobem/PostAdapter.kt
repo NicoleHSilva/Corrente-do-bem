@@ -1,5 +1,6 @@
 package com.example.ondadobem
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ class PostAdapter(
         val texto: TextView = v.findViewById(R.id.txtTexto)
         val foto: ImageView = v.findViewById(R.id.imgFoto)
         val curtir: TextView = v.findViewById(R.id.btnCurtir)
+        val compartilhar: TextView = v.findViewById(R.id.btnCompartilhar)
         val excluir: ImageButton = v.findViewById(R.id.btnExcluir)
     }
 
@@ -42,7 +44,11 @@ class PostAdapter(
         h.texto.visibility = if (post.texto.isEmpty()) View.GONE else View.VISIBLE
 
         val caminho = post.foto
-        if (caminho != null && File(caminho).exists()) {
+        val ilustracao = ilustracaoDe(caminho)
+        if (ilustracao != null) {
+            h.foto.visibility = View.VISIBLE
+            h.foto.setImageResource(ilustracao)
+        } else if (caminho != null && File(caminho).exists()) {
             h.foto.visibility = View.VISIBLE
             Imagens.carregar(h.foto, caminho, 720)
         } else {
@@ -57,9 +63,24 @@ class PostAdapter(
             val pos = h.bindingAdapterPosition
             if (pos != RecyclerView.NO_POSITION) aoCurtir(pos)
         }
+        h.compartilhar.setOnClickListener {
+            val ctx = h.itemView.context
+            val envio = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, ctx.getString(R.string.texto_compartilhar, post.autor, post.texto))
+            }
+            ctx.startActivity(Intent.createChooser(envio, ctx.getString(R.string.compartilhar_titulo)))
+        }
         h.excluir.setOnClickListener {
             val pos = h.bindingAdapterPosition
             if (pos != RecyclerView.NO_POSITION) aoExcluir(pos)
         }
+    }
+
+    private fun ilustracaoDe(nome: String?): Int? = when (nome) {
+        "res:praia" -> R.drawable.ilustracao_praia
+        "res:mutirao" -> R.drawable.ilustracao_multirao
+        "res:reciclagem" -> R.drawable.ilustracao_reciclagem
+        else -> null
     }
 }

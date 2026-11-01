@@ -37,11 +37,10 @@ class MapaFragment : Fragment(R.layout.fragment_mapa) {
 
         mapa.setTileSource(TileSourceFactory.MAPNIK)
         mapa.setMultiTouchControls(true)
-        mapa.controller.setZoom(12.0)
-        val ultimo = pontos.lastOrNull()
-        mapa.controller.setCenter(
-            if (ultimo != null) GeoPoint(ultimo.lat, ultimo.lon) else GeoPoint(-23.5505, -46.6333)
-        )
+        mapa.setMinZoomLevel(3.0)
+        mapa.setMaxZoomLevel(19.0)
+        mapa.controller.setZoom(4.0)
+        mapa.controller.setCenter(GeoPoint(-14.2350, -51.9253))
 
         val receptor = object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint): Boolean {
@@ -117,15 +116,18 @@ class MapaFragment : Fragment(R.layout.fragment_mapa) {
                     edtTitulo.error = getString(R.string.erro_titulo)
                     return@setOnClickListener
                 }
-                val novo = Ponto(
-                    System.currentTimeMillis(),
-                    titulo,
-                    edtDescricao.text.toString().trim(),
-                    local.latitude,
-                    local.longitude
+                val descricao = edtDescricao.text.toString().trim()
+                val novoPonto = Ponto(
+                    id = System.currentTimeMillis(),
+                    titulo = titulo,
+                    descricao = descricao,
+                    lat = local.latitude,
+                    lon = local.longitude
                 )
-                pontos.add(novo)
-                salvarERedesenhar()
+                pontos.add(0, novoPonto)
+                Armazenamento.salvarPontos(requireContext(), pontos)
+                desenharPontos()
+                atualizarBanner()
                 dialogo.dismiss()
             }
         }
@@ -133,45 +135,37 @@ class MapaFragment : Fragment(R.layout.fragment_mapa) {
     }
 
     private fun mostrarDetalhes(ponto: Ponto) {
-        val data = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR")).format(Date(ponto.criadoEm))
-        val situacao = getString(if (ponto.resolvido) R.string.status_limpo else R.string.status_pendente)
-        val descricao = if (ponto.descricao.isEmpty()) "" else ponto.descricao + "\n\n"
-        val mensagem = descricao + getString(R.string.detalhe_status, situacao, data)
+        val dataFormatada = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+            .format(Date(ponto.criadoEm))
+        val statusText = getString(if (ponto.resolvido) R.string.status_limpo else R.string.status_pendente)
+        val detalheStatus = getString(R.string.detalhe_status, statusText, dataFormatada)
+        val mensagem = if (ponto.descricao.isNotBlank()) {
+            "${ponto.descricao}\n\n$detalheStatus"
+        } else {
+            detalheStatus
+        }
+
+        val btnStatusText = if (ponto.resolvido) R.string.reabrir else R.string.marcar_limpo
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(ponto.titulo)
             .setMessage(mensagem)
-            .setPositiveButton(if (ponto.resolvido) R.string.reabrir else R.string.marcar_limpo) { _, _ ->
-                val indice = pontos.indexOfFirst { it.id == ponto.id }
-                if (indice >= 0) pontos[indice] = ponto.copy(resolvido = !ponto.resolvido)
-                salvarERedesenhar()
+            .setPositiveButton(btnStatusText) { _, _ ->
+                val index = pontos.indexOfFirst { it.id == ponto.id }
+                if (index != -1) {
+                    pontos[index] = ponto.copy(resolvido = !ponto.resolvido)
+                    Armazenamento.salvarPontos(requireContext(), pontos)
+                    desenharPontos()
+                    atualizarBanner()
+                }
             }
             .setNeutralButton(R.string.remover) { _, _ ->
                 pontos.removeAll { it.id == ponto.id }
-                salvarERedesenhar()
+                Armazenamento.salvarPontos(requireContext(), pontos)
+                desenharPontos()
+                atualizarBanner()
             }
             .setNegativeButton(R.string.fechar, null)
             .show()
-    }
-
-    private fun salvarERedesenhar() {
-        Armazenamento.salvarPontos(requireContext(), pontos)
-        desenharPontos()
-        atualizarBanner()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        mapa.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        mapa.onPause()
-    }
-
-    override fun onDestroyView() {
-        mapa.onDetach()
-        super.onDestroyView()
     }
 }

@@ -66,9 +66,9 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil) {
         }
 
         view.findViewById<TextView>(R.id.txtQtdPontos).text =
-            Armazenamento.pontos(ctx).size.toString()
+            Armazenamento.pontos(ctx).count { it.id > 1000 }.toString()
         view.findViewById<TextView>(R.id.txtQtdPosts).text =
-            Armazenamento.posts(ctx).size.toString()
+            Armazenamento.posts(ctx).count { it.id > 1000 }.toString()
 
         val switchTema = view.findViewById<MaterialSwitch>(R.id.switchTema)
         val modoAtual = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK

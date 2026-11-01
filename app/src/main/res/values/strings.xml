@@ -85,4 +85,17 @@
     <string name="contrib_pontos">pontos marcados</string>
     <string name="contrib_posts">publicações</string>
     <string name="desc_avatar">Foto do perfil</string>
+    <string name="hint_post_novo">Compartilhe conosco o que você quer ou alguma frase relacionada</string>
+    <string name="compose_titulo">O que você fez pelo planeta hoje?</string>
+    <string name="atalho_dicas">Dicas</string>
+    <string name="atalho_metas">Metas</string>
+    <string name="btn_compartilhar">Compartilhar</string>
+    <string name="compartilhar_titulo">Compartilhar publicação</string>
+    <string name="texto_compartilhar">%1$s publicou no Corrente do Bem: %2$s</string>
+    <string name="autor_ex1">Marina Costa</string>
+    <string name="post_ex1">Hoje fiz a coleta na praia com a turma! Em duas horas juntamos 18 sacos de lixo. Cada gesto conta 🌊💚</string>
+    <string name="autor_ex2">Coletivo Rio Limpo</string>
+    <string name="post_ex2">Mutirão de sábado concluído! Tiramos plástico e garrafas da margem do rio. Quem vem com a gente no próximo? 🌳</string>
+    <string name="autor_ex3">Lucas Almeida</string>
+    <string name="post_ex3">Separei o lixo reciclável aqui do prédio e já levei ao ponto de coleta. Pequenas atitudes, grande mudança! ♻️</string>
 </resources>

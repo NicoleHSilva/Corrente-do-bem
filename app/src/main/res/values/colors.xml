@@ -9,6 +9,8 @@
     <color name="ciano_suave">#B2EBF2</color>
     <color name="branco">#FFFFFF</color>
     <color name="fundo">#F1F8E9</color>
+    <color name="fundo_topo">#C9F0F4</color>
+    <color name="fundo_base">#E3F6E1</color>
     <color name="superficie">#FFFFFF</color>
     <color name="texto_principal">#1B2E1C</color>
     <color name="texto_secundario">#4F6350</color>
