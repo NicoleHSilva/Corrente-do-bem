@@ -1,4 +1,4 @@
-package com.example.ondadobem
+package com.example.correntedobem
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
@@ -7,7 +7,7 @@ import org.json.JSONArray
 object Armazenamento {
 
     private fun prefs(ctx: Context) =
-        ctx.getSharedPreferences("onda_do_bem", Context.MODE_PRIVATE)
+        ctx.getSharedPreferences("corrente_do_bem", Context.MODE_PRIVATE)
 
     fun pontos(ctx: Context): MutableList<Ponto> {
         val arr = JSONArray(prefs(ctx).getString("pontos", "[]") ?: "[]")

@@ -1,4 +1,4 @@
-package com.example.ondadobem
+package com.example.correntedobem
 
 import android.content.Context
 import android.graphics.Bitmap

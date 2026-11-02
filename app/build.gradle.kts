@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.ondadobem"
+    namespace = "com.example.correntedobem"
     compileSdk = 34
 
     defaultConfig {

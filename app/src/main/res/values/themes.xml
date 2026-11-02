@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.OndaDoBem" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.CorrenteDoBem" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/verde_primario</item>
         <item name="colorOnPrimary">@color/branco</item>
         <item name="colorPrimaryContainer">@color/verde_claro</item>

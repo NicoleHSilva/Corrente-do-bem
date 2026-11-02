@@ -1,6 +1,6 @@
 # 🌿 Corrente do Bem
 
-Aplicativo Android com o tema **Sustentabilidade**, desenvolvido como **trabalho da faculdade** no curso de **Análise e Desenvolvimento de Sistemas** do **Cruzeiro do Sul** (Unicsul). O foco da atividade é o **front end**: layout, imagens, UI, cores e temas.
+Aplicativo Android com o tema **Sustentabilidade**, desenvolvido como **trabalho da faculdade** no curso de **Análise e Desenvolvimento de Sistemas** da **Unicsul** (Universidade Cruzeiro do Sul). O foco da atividade é o **front end**: layout, imagens, UI, cores e temas (conteúdo das aulas 1 a 8).
 
 O app incentiva a comunidade a **identificar pontos de lixo que precisam de ajuda para retirada**, compartilhar ações de limpeza e acompanhar metas sustentáveis do dia a dia.
 
@@ -48,7 +48,7 @@ Tela inicial no estilo rede social:
 | Gradle | 8.7 |
 | JDK | 17 |
 | compileSdk / targetSdk / minSdk | 34 / 34 / 26 (Android 8.0 ou superior) |
-| Pacote | `com.example.ondadobem` |
+| Pacote | `com.example.correntedobem` |
 
 **Bibliotecas:** AndroidX (core-ktx, appcompat, constraintlayout, recyclerview), Material Components 1.12.0 e osmdroid 6.1.18 (mapa OpenStreetMap, sem necessidade de chave de API).
 
@@ -58,8 +58,8 @@ Tela inicial no estilo rede social:
 ```
 app/src/main/
 ├── AndroidManifest.xml
-├── java/com/example/ondadobem/
-│   ├── OndaApp.kt            # inicialização (mapa e tema salvo)
+├── java/com/example/correntedobem/
+│   ├── CorrenteApp.kt        # inicialização (mapa e tema salvo)
 │   ├── MainActivity.kt       # barra inferior e troca de abas
 │   ├── FeedFragment.kt       # aba Início (feed)
 │   ├── PostAdapter.kt        # lista de publicações
@@ -103,9 +103,10 @@ Nesta versão os dados ficam **salvos apenas no aparelho** (SharedPreferences em
 | 1.0 | App com tema Sustentabilidade: telas de Dicas e Metas, layouts, cores e modo escuro. |
 | 1.1 | Barra inferior com abas de **Mapa**, **Feed** e **Perfil**; dados salvos no aparelho. |
 | 1.2 | Feed vira a tela inicial (estilo rede social, com posts de exemplo); mapa abre no Brasil com pontos de exemplo; novo fundo em degradê. |
+| 1.3 | Revisão dos nomes internos do projeto (pacote, tema e classe inicial) e do README. |
 
 ## 👩‍💻 Autora
-**Nicole Henrique Silva**, aluna de Análise e Desenvolvimento de Sistemas, Cruzeiro do Sul.
+**Nicole Henrique Silva**, aluna de Análise e Desenvolvimento de Sistemas, Unicsul.
 
 ## 📄 Licença
 Distribuído sob a licença **MIT**. Veja o arquivo [LICENSE](LICENSE).
