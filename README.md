@@ -1,6 +1,6 @@
 # 🌿 Corrente do Bem
 
-Aplicativo Android com o tema **Sustentabilidade**, desenvolvido como **trabalho da faculdade** no curso de **Análise e Desenvolvimento de Sistemas** da **Unicsul** (Universidade Cruzeiro do Sul). O foco da atividade é o **front end**: layout, imagens, UI, cores e temas (conteúdo das aulas 1 a 8).
+Aplicativo Android com o tema **Sustentabilidade**, desenvolvido como **trabalho da faculdade** no curso de **Análise e Desenvolvimento de Sistemas** da **Unicsul** (Universidade Cruzeiro do Sul). O foco da atividade é o **front end**: layout, imagens, UI, cores e temas.
 
 O app incentiva a comunidade a **identificar pontos de lixo que precisam de ajuda para retirada**, compartilhar ações de limpeza e acompanhar metas sustentáveis do dia a dia.
 
