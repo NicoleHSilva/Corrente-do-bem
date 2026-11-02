@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import org.osmdroid.config.Configuration
 import java.io.File
 
-class OndaApp : Application() {
+class CorrenteApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
