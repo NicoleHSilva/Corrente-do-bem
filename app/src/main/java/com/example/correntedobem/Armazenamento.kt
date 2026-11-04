@@ -3,6 +3,12 @@ package com.example.correntedobem
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import org.json.JSONArray
+import java.security.MessageDigest
+import java.util.UUID
+
+object Sessao {
+    var desbloqueado = false
+}
 
 object Armazenamento {
 
@@ -70,6 +76,48 @@ object Armazenamento {
     fun salvarModoTema(ctx: Context, modo: Int) {
         prefs(ctx).edit().putInt("modo_tema", modo).apply()
     }
+
+    fun temSenha(ctx: Context): Boolean = prefs(ctx).contains("senha_hash")
+
+    fun definirSenha(ctx: Context, senha: String) {
+        val sal = UUID.randomUUID().toString()
+        prefs(ctx).edit()
+            .putString("senha_sal", sal)
+            .putString("senha_hash", gerarHash(sal + senha))
+            .apply()
+    }
+
+    fun conferirSenha(ctx: Context, senha: String): Boolean {
+        val sal = prefs(ctx).getString("senha_sal", null) ?: return false
+        return gerarHash(sal + senha) == prefs(ctx).getString("senha_hash", null)
+    }
+
+    fun removerSenha(ctx: Context) {
+        prefs(ctx).edit().remove("senha_sal").remove("senha_hash").apply()
+    }
+
+    fun mostrarLimpos(ctx: Context): Boolean = prefs(ctx).getBoolean("mostrar_limpos", true)
+
+    fun salvarMostrarLimpos(ctx: Context, valor: Boolean) {
+        prefs(ctx).edit().putBoolean("mostrar_limpos", valor).apply()
+    }
+
+    fun restaurarExemplos(ctx: Context) {
+        salvarPontos(ctx, pontosExemplo())
+        salvarPosts(ctx, postsExemplo(ctx))
+        prefs(ctx).edit().putBoolean("pontos_exemplo", true).putBoolean("posts_exemplo", true).apply()
+    }
+
+    fun apagarPublicacoesEPontos(ctx: Context) {
+        salvarPontos(ctx, emptyList())
+        salvarPosts(ctx, emptyList())
+        prefs(ctx).edit().putBoolean("pontos_exemplo", true).putBoolean("posts_exemplo", true).apply()
+    }
+
+    private fun gerarHash(texto: String): String =
+        MessageDigest.getInstance("SHA-256")
+            .digest(texto.toByteArray())
+            .joinToString("") { "%02x".format(it) }
 
     private fun postsExemplo(ctx: Context): List<Post> {
         val agora = System.currentTimeMillis()

@@ -9,16 +9,23 @@ data class Ponto(
     val lat: Double,
     val lon: Double,
     val resolvido: Boolean = false,
-    val criadoEm: Long = System.currentTimeMillis()
+    val criadoEm: Long = System.currentTimeMillis(),
+    val provaFoto: String? = null,
+    val provaTexto: String? = null
 ) {
-    fun paraJson(): JSONObject = JSONObject()
-        .put("id", id)
-        .put("titulo", titulo)
-        .put("descricao", descricao)
-        .put("lat", lat)
-        .put("lon", lon)
-        .put("resolvido", resolvido)
-        .put("criadoEm", criadoEm)
+    fun paraJson(): JSONObject {
+        val o = JSONObject()
+            .put("id", id)
+            .put("titulo", titulo)
+            .put("descricao", descricao)
+            .put("lat", lat)
+            .put("lon", lon)
+            .put("resolvido", resolvido)
+            .put("criadoEm", criadoEm)
+        if (provaFoto != null) o.put("provaFoto", provaFoto)
+        if (provaTexto != null) o.put("provaTexto", provaTexto)
+        return o
+    }
 
     companion object {
         fun deJson(o: JSONObject) = Ponto(
@@ -28,7 +35,9 @@ data class Ponto(
             o.getDouble("lat"),
             o.getDouble("lon"),
             o.getBoolean("resolvido"),
-            o.getLong("criadoEm")
+            o.getLong("criadoEm"),
+            if (o.has("provaFoto")) o.getString("provaFoto") else null,
+            if (o.has("provaTexto")) o.getString("provaTexto") else null
         )
     }
 }

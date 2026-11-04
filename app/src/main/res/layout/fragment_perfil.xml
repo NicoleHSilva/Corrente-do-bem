@@ -161,7 +161,11 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                style="@style/CardEco">
+                android:id="@+id/cardConfiguracoes"
+                style="@style/CardEco"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -170,17 +174,32 @@
                     android:orientation="horizontal"
                     android:padding="16dp">
 
-                    <TextView
-                        style="@style/TituloCard"
+                    <ImageView
+                        style="@style/IconeCard"
+                        android:background="@drawable/bg_icone_ciano"
+                        android:contentDescription="@string/desc_icone"
+                        android:src="@drawable/ic_configuracoes"
+                        android:tint="@color/icone_ciano" />
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
                         android:layout_weight="1"
-                        android:text="@string/modo_escuro" />
+                        android:orientation="vertical">
 
-                    <com.google.android.material.materialswitch.MaterialSwitch
-                        android:id="@+id/switchTema"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        <TextView
+                            style="@style/TituloCard"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/config_titulo" />
+
+                        <TextView
+                            style="@style/TextoCorpo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/config_card_desc" />
+                    </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

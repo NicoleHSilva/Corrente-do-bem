@@ -1,7 +1,7 @@
 package com.example.correntedobem
 
+import android.content.Intent
 import android.content.res.ColorStateList
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -9,11 +9,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.textfield.TextInputEditText
 
 class PerfilFragment : Fragment(R.layout.fragment_perfil) {
@@ -70,13 +69,8 @@ class PerfilFragment : Fragment(R.layout.fragment_perfil) {
         view.findViewById<TextView>(R.id.txtQtdPosts).text =
             Armazenamento.posts(ctx).count { it.id > 1000 }.toString()
 
-        val switchTema = view.findViewById<MaterialSwitch>(R.id.switchTema)
-        val modoAtual = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        switchTema.isChecked = modoAtual == Configuration.UI_MODE_NIGHT_YES
-        switchTema.setOnCheckedChangeListener { _, marcado ->
-            val modo = if (marcado) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-            Armazenamento.salvarModoTema(ctx, modo)
-            AppCompatDelegate.setDefaultNightMode(modo)
+        view.findViewById<MaterialCardView>(R.id.cardConfiguracoes).setOnClickListener {
+            startActivity(Intent(ctx, ConfiguracoesActivity::class.java))
         }
     }
 

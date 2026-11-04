@@ -1,6 +1,6 @@
 # 🌿 Corrente do Bem
 
-Aplicativo Android com o tema **Sustentabilidade**, desenvolvido como **trabalho da faculdade** no curso de **Análise e Desenvolvimento de Sistemas** da **Unicsul** (Universidade Cruzeiro do Sul). O foco da atividade é o **front end**: layout, imagens, UI, cores e temas.
+Aplicativo Android com o tema **Sustentabilidade**, desenvolvido como **trabalho da faculdade** no curso de **Análise e Desenvolvimento de Sistemas** da **Unicsul**. O foco da atividade é o **front end**: layout, imagens, UI, cores e temas.
 
 O app incentiva a comunidade a **identificar pontos de lixo que precisam de ajuda para retirada**, compartilhar ações de limpeza e acompanhar metas sustentáveis do dia a dia.
 
@@ -22,12 +22,20 @@ Tela inicial no estilo rede social:
 - **10 pontos de exemplo** espalhados pelo país: pino laranja = precisa de ajuda; pino verde = já foi limpo.
 - Botão **Adicionar ponto**: toque no mapa para escolher o local e preencha o nome e a descrição.
 - Ao tocar em um pino: ver detalhes, **marcar como limpo**, **reabrir** ou **remover** o ponto.
+- **Prova de limpeza:** para marcar um local como limpo, é obrigatório anexar uma **foto de prova** (com comentário opcional). A prova fica visível nos detalhes do ponto e é apagada se o ponto for reaberto.
 - Aviso no topo com a contagem de pontos pendentes e já limpos.
 
 ### 👤 Perfil
 - Foto (escolhida da galeria), nome e bio.
 - Contadores de **pontos marcados** e **publicações** feitos pelo usuário (os de exemplo não entram na conta).
-- Chave de **modo escuro**, que fica salva ao fechar o app.
+- Acesso à tela de **Configurações**.
+
+### ⚙️ Configurações
+- **Aparência:** tema claro, escuro ou automático (igual ao celular), salvo ao fechar o app.
+- **Segurança:** definir, alterar e remover uma **senha do app**, pedida ao abrir o aplicativo. A senha é guardada como hash com sal (nunca em texto).
+- **Mapa:** mostrar ou esconder os pontos já limpos.
+- **Dados do app:** restaurar os dados de exemplo ou apagar publicações e pontos.
+- **Sobre:** versão do app e licença.
 
 ### 📚 Telas secundárias (abertas pelos atalhos do Feed)
 - **Dicas Sustentáveis:** 4 cartões (água, energia, descarte correto e consumo consciente).
@@ -59,23 +67,24 @@ Tela inicial no estilo rede social:
 app/src/main/
 ├── AndroidManifest.xml
 ├── java/com/example/correntedobem/
-│   ├── CorrenteApp.kt        # inicialização (mapa e tema salvo)
-│   ├── MainActivity.kt       # barra inferior e troca de abas
-│   ├── FeedFragment.kt       # aba Início (feed)
-│   ├── PostAdapter.kt        # lista de publicações
-│   ├── MapaFragment.kt       # aba Mapa
-│   ├── PerfilFragment.kt     # aba Perfil
-│   ├── DicasActivity.kt      # tela de dicas
-│   ├── MetasActivity.kt      # tela de metas
-│   ├── Modelos.kt            # Ponto, Post e Perfil
-│   ├── Armazenamento.kt      # salvar e ler dados
-│   └── Imagens.kt            # tratamento das fotos
+│   ├── CorrenteApp.kt            # inicialização (mapa e tema salvo)
+│   ├── MainActivity.kt           # barra inferior, troca de abas e senha
+│   ├── FeedFragment.kt           # aba Início (feed)
+│   ├── PostAdapter.kt            # lista de publicações
+│   ├── MapaFragment.kt           # aba Mapa
+│   ├── PerfilFragment.kt         # aba Perfil
+│   ├── ConfiguracoesActivity.kt  # tela de configurações
+│   ├── DicasActivity.kt          # tela de dicas
+│   ├── MetasActivity.kt          # tela de metas
+│   ├── Modelos.kt                # Ponto, Post e Perfil
+│   ├── Armazenamento.kt          # salvar e ler dados
+│   └── Imagens.kt                # tratamento das fotos
 └── res/
-    ├── layout/               # telas e itens
-    ├── drawable/             # ícones e ilustrações vetoriais
-    ├── menu/                 # menu da barra inferior
-    ├── values/               # cores, textos, estilos, tema
-    └── values-night/         # cores do modo escuro
+    ├── layout/                   # telas, itens e caixas de diálogo
+    ├── drawable/                 # ícones e ilustrações vetoriais
+    ├── menu/                     # menu da barra inferior
+    ├── values/                   # cores, textos, estilos, tema
+    └── values-night/             # cores do modo escuro
 ```
 
 ## ▶️ Como executar
@@ -90,12 +99,13 @@ app/src/main/
 > O mapa precisa de **internet** para carregar. Se os posts ou pontos de exemplo não aparecerem, desinstale o app do emulador (ou use **Device Manager > Wipe Data**) e rode de novo.
 
 ## 💾 Armazenamento dos dados
-Nesta versão os dados ficam **salvos apenas no aparelho** (SharedPreferences em JSON e fotos na pasta interna do app). Não há servidor, então posts e pontos não são compartilhados entre usuários.
+Nesta versão os dados ficam **salvos apenas no aparelho** (SharedPreferences em JSON e fotos na pasta interna do app). Não há servidor, então posts, pontos e provas não são compartilhados entre usuários.
 
 ## 🔮 Próximos passos
 - Compartilhar posts e pontos entre usuários (ex.: serviço online como o Firebase).
 - Comentários nas publicações.
 - Marcar o ponto no mapa pela localização atual do usuário.
+- Recuperação de senha.
 
 ## 📝 Histórico de atualizações
 | Versão | Mudanças |
@@ -104,6 +114,7 @@ Nesta versão os dados ficam **salvos apenas no aparelho** (SharedPreferences em
 | 1.1 | Barra inferior com abas de **Mapa**, **Feed** e **Perfil**; dados salvos no aparelho. |
 | 1.2 | Feed vira a tela inicial (estilo rede social, com posts de exemplo); mapa abre no Brasil com pontos de exemplo; novo fundo em degradê. |
 | 1.3 | Revisão dos nomes internos do projeto (pacote, tema e classe inicial) e do README. |
+| 1.4 | **Prova de limpeza** (foto obrigatória) ao marcar um ponto como limpo; tela de **Configurações** com senha do app, tema, opções do mapa e dados. |
 
 ## 👩‍💻 Autora
 **Nicole Henrique Silva**, aluna de Análise e Desenvolvimento de Sistemas, Unicsul.

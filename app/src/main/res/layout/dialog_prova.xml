@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingStart="24dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="24dp">
+
+    <TextView
+        style="@style/TextoCorpo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/prova_explicacao" />
+
+    <ImageView
+        android:id="@+id/imgProva"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/ciano_claro"
+        android:contentDescription="@string/desc_prova"
+        android:padding="56dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_foto"
+        android:tint="@color/icone_ciano" />
+
+    <Button
+        android:id="@+id/btnAnexarProva"
+        style="@style/BotaoVoltar"
+        android:text="@string/btn_anexar_prova" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="@string/hint_prova_texto">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtComentarioProva"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minLines="2" />
+    </com.google.android.material.textfield.TextInputLayout>
+</LinearLayout>

@@ -2,7 +2,12 @@ package com.example.correntedobem
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -15,6 +20,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -26,6 +32,23 @@ class MapaFragment : Fragment(R.layout.fragment_mapa) {
     private lateinit var botaoPonto: ExtendedFloatingActionButton
     private lateinit var pontos: MutableList<Ponto>
     private var modoAdicionar = false
+    private var provaCaminho: String? = null
+    private var imagemProva: ImageView? = null
+
+    private val escolherProva =
+        registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                val caminho = Imagens.salvar(requireContext(), uri, 1280)
+                if (caminho != null) {
+                    provaCaminho = caminho
+                    imagemProva?.let {
+                        it.imageTintList = null
+                        it.setPadding(0, 0, 0, 0)
+                        Imagens.carregar(it, caminho, 600)
+                    }
+                }
+            }
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,7 +102,8 @@ class MapaFragment : Fragment(R.layout.fragment_mapa) {
 
     private fun desenharPontos() {
         mapa.overlays.removeAll { it is Marker }
-        pontos.forEach { ponto ->
+        val mostrarLimpos = Armazenamento.mostrarLimpos(requireContext())
+        pontos.filter { mostrarLimpos || !it.resolvido }.forEach { ponto ->
             val marcador = Marker(mapa)
             marcador.position = GeoPoint(ponto.lat, ponto.lon)
             marcador.title = ponto.titulo
@@ -116,18 +140,15 @@ class MapaFragment : Fragment(R.layout.fragment_mapa) {
                     edtTitulo.error = getString(R.string.erro_titulo)
                     return@setOnClickListener
                 }
-                val descricao = edtDescricao.text.toString().trim()
-                val novoPonto = Ponto(
-                    id = System.currentTimeMillis(),
-                    titulo = titulo,
-                    descricao = descricao,
-                    lat = local.latitude,
-                    lon = local.longitude
+                val novo = Ponto(
+                    System.currentTimeMillis(),
+                    titulo,
+                    edtDescricao.text.toString().trim(),
+                    local.latitude,
+                    local.longitude
                 )
-                pontos.add(0, novoPonto)
-                Armazenamento.salvarPontos(requireContext(), pontos)
-                desenharPontos()
-                atualizarBanner()
+                pontos.add(novo)
+                salvarERedesenhar()
                 dialogo.dismiss()
             }
         }
@@ -135,37 +156,118 @@ class MapaFragment : Fragment(R.layout.fragment_mapa) {
     }
 
     private fun mostrarDetalhes(ponto: Ponto) {
-        val dataFormatada = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-            .format(Date(ponto.criadoEm))
-        val statusText = getString(if (ponto.resolvido) R.string.status_limpo else R.string.status_pendente)
-        val detalheStatus = getString(R.string.detalhe_status, statusText, dataFormatada)
-        val mensagem = if (ponto.descricao.isNotBlank()) {
-            "${ponto.descricao}\n\n$detalheStatus"
-        } else {
-            detalheStatus
-        }
+        val conteudo = layoutInflater.inflate(R.layout.dialog_detalhe, null)
+        val data = SimpleDateFormat("dd/MM/yyyy", Locale("pt", "BR")).format(Date(ponto.criadoEm))
+        val situacao = getString(if (ponto.resolvido) R.string.status_limpo else R.string.status_pendente)
+        val descricao = if (ponto.descricao.isEmpty()) "" else ponto.descricao + "\n\n"
+        conteudo.findViewById<TextView>(R.id.txtDetalhe).text =
+            descricao + getString(R.string.detalhe_status, situacao, data)
 
-        val btnStatusText = if (ponto.resolvido) R.string.reabrir else R.string.marcar_limpo
+        if (ponto.resolvido) {
+            val txtProva = conteudo.findViewById<TextView>(R.id.txtDetalheProva)
+            val imgProva = conteudo.findViewById<ImageView>(R.id.imgDetalheProva)
+            txtProva.visibility = View.VISIBLE
+            val foto = ponto.provaFoto
+            if (foto != null && File(foto).exists()) {
+                val comentario = ponto.provaTexto
+                txtProva.text = if (comentario.isNullOrBlank()) {
+                    getString(R.string.prova_label)
+                } else {
+                    getString(R.string.prova_com_texto, comentario)
+                }
+                imgProva.visibility = View.VISIBLE
+                Imagens.carregar(imgProva, foto, 600)
+            } else {
+                txtProva.text = getString(R.string.prova_sem)
+            }
+        }
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(ponto.titulo)
-            .setMessage(mensagem)
-            .setPositiveButton(btnStatusText) { _, _ ->
-                val index = pontos.indexOfFirst { it.id == ponto.id }
-                if (index != -1) {
-                    pontos[index] = ponto.copy(resolvido = !ponto.resolvido)
-                    Armazenamento.salvarPontos(requireContext(), pontos)
-                    desenharPontos()
-                    atualizarBanner()
+            .setView(conteudo)
+            .setPositiveButton(if (ponto.resolvido) R.string.reabrir else R.string.marcar_limpo) { _, _ ->
+                if (ponto.resolvido) {
+                    atualizarPonto(ponto.copy(resolvido = false, provaFoto = null, provaTexto = null))
+                } else {
+                    pedirProva(ponto)
                 }
             }
             .setNeutralButton(R.string.remover) { _, _ ->
                 pontos.removeAll { it.id == ponto.id }
-                Armazenamento.salvarPontos(requireContext(), pontos)
-                desenharPontos()
-                atualizarBanner()
+                salvarERedesenhar()
             }
             .setNegativeButton(R.string.fechar, null)
             .show()
+    }
+
+    private fun pedirProva(ponto: Ponto) {
+        val conteudo = layoutInflater.inflate(R.layout.dialog_prova, null)
+        val imagem = conteudo.findViewById<ImageView>(R.id.imgProva)
+        val edtComentario = conteudo.findViewById<TextInputEditText>(R.id.edtComentarioProva)
+        provaCaminho = null
+        imagemProva = imagem
+
+        conteudo.findViewById<Button>(R.id.btnAnexarProva).setOnClickListener {
+            escolherProva.launch(
+                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+            )
+        }
+
+        val dialogo = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.prova_titulo)
+            .setView(conteudo)
+            .setPositiveButton(R.string.btn_confirmar, null)
+            .setNegativeButton(R.string.btn_cancelar, null)
+            .create()
+
+        dialogo.setOnShowListener {
+            dialogo.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val caminho = provaCaminho
+                if (caminho == null) {
+                    Toast.makeText(requireContext(), R.string.prova_obrigatoria, Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                atualizarPonto(
+                    ponto.copy(
+                        resolvido = true,
+                        provaFoto = caminho,
+                        provaTexto = edtComentario.text.toString().trim()
+                    )
+                )
+                dialogo.dismiss()
+            }
+        }
+        dialogo.setOnDismissListener {
+            imagemProva = null
+            provaCaminho = null
+        }
+        dialogo.show()
+    }
+
+    private fun atualizarPonto(novo: Ponto) {
+        val indice = pontos.indexOfFirst { it.id == novo.id }
+        if (indice >= 0) pontos[indice] = novo
+        salvarERedesenhar()
+    }
+
+    private fun salvarERedesenhar() {
+        Armazenamento.salvarPontos(requireContext(), pontos)
+        desenharPontos()
+        atualizarBanner()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapa.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapa.onPause()
+    }
+
+    override fun onDestroyView() {
+        mapa.onDetach()
+        super.onDestroyView()
     }
 }
