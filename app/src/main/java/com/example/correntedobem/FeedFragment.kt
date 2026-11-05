@@ -86,7 +86,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         }
         val autor = Armazenamento.perfil(ctx).nome.ifBlank { getString(R.string.autor_padrao) }
         val agora = System.currentTimeMillis()
-        posts.add(0, Post(agora, autor, texto, fotoPendente, agora))
+        posts.add(0, Post(agora, autor, texto, fotoPendente, agora, autorId = Armazenamento.contaAtualId(ctx)))
         adapter.notifyItemInserted(0)
         (requireView() as NestedScrollView).smoothScrollTo(0, 0)
         Armazenamento.salvarPosts(ctx, posts)

@@ -6,10 +6,6 @@ import org.json.JSONArray
 import java.security.MessageDigest
 import java.util.UUID
 
-object Sessao {
-    var desbloqueado = false
-}
-
 object Armazenamento {
 
     private fun prefs(ctx: Context) =
@@ -54,20 +50,104 @@ object Armazenamento {
     }
 
     fun perfil(ctx: Context): Perfil {
-        val p = prefs(ctx)
-        return Perfil(
-            p.getString("perfil_nome", "") ?: "",
-            p.getString("perfil_bio", "") ?: "",
-            p.getString("perfil_foto", null)
-        )
+        val conta = contaAtual(ctx) ?: return Perfil()
+        return Perfil(conta.nome, conta.bio, conta.foto)
     }
 
-    fun salvarPerfil(ctx: Context, perfil: Perfil) {
-        prefs(ctx).edit()
-            .putString("perfil_nome", perfil.nome)
-            .putString("perfil_bio", perfil.bio)
-            .putString("perfil_foto", perfil.foto)
-            .apply()
+    private fun lerContas(ctx: Context): MutableList<Conta> {
+        val arr = JSONArray(prefs(ctx).getString("contas", "[]") ?: "[]")
+        return MutableList(arr.length()) { Conta.deJson(arr.getJSONObject(it)) }
+    }
+
+    private fun salvarContas(ctx: Context, lista: List<Conta>) {
+        val arr = JSONArray()
+        lista.forEach { arr.put(it.paraJson()) }
+        prefs(ctx).edit().putString("contas", arr.toString()).apply()
+    }
+
+    fun contas(ctx: Context): List<Conta> = lerContas(ctx)
+
+    fun contaAtual(ctx: Context): Conta? {
+        val id = prefs(ctx).getLong("conta_atual", -1L)
+        return lerContas(ctx).firstOrNull { it.id == id }
+    }
+
+    fun contaAtualId(ctx: Context): Long = contaAtual(ctx)?.id ?: 0L
+
+    fun criarConta(ctx: Context, nome: String, email: String, senha: String): Boolean {
+        val lista = lerContas(ctx)
+        val emailLimpo = email.trim().lowercase()
+        if (lista.any { it.email == emailLimpo }) return false
+        val sal = UUID.randomUUID().toString()
+        val nova = Conta(System.currentTimeMillis(), nome.trim(), emailLimpo, "", null, sal, gerarHash(sal + senha))
+        if (lista.isEmpty()) adotarPostsAntigos(ctx, nova.id)
+        lista.add(nova)
+        salvarContas(ctx, lista)
+        prefs(ctx).edit().putLong("conta_atual", nova.id).apply()
+        return true
+    }
+
+    fun entrar(ctx: Context, email: String, senha: String): Boolean {
+        val conta = lerContas(ctx).firstOrNull { it.email == email.trim().lowercase() } ?: return false
+        if (gerarHash(conta.sal + senha) != conta.hash) return false
+        prefs(ctx).edit().putLong("conta_atual", conta.id).apply()
+        return true
+    }
+
+    fun trocarConta(ctx: Context, id: Long, senha: String): Boolean {
+        val conta = lerContas(ctx).firstOrNull { it.id == id } ?: return false
+        if (gerarHash(conta.sal + senha) != conta.hash) return false
+        prefs(ctx).edit().putLong("conta_atual", conta.id).apply()
+        return true
+    }
+
+    fun sair(ctx: Context) {
+        prefs(ctx).edit().remove("conta_atual").apply()
+    }
+
+    fun atualizarPerfil(ctx: Context, nome: String, bio: String, foto: String?) {
+        val lista = lerContas(ctx)
+        val indice = lista.indexOfFirst { it.id == contaAtualId(ctx) }
+        if (indice < 0) return
+        lista[indice] = lista[indice].copy(nome = nome, bio = bio, foto = foto)
+        salvarContas(ctx, lista)
+    }
+
+    fun redefinirEmail(ctx: Context, novoEmail: String, senha: String): Int? {
+        val lista = lerContas(ctx)
+        val indice = lista.indexOfFirst { it.id == contaAtualId(ctx) }
+        if (indice < 0) return R.string.login_invalido
+        val conta = lista[indice]
+        if (gerarHash(conta.sal + senha) != conta.hash) return R.string.senha_incorreta
+        val emailLimpo = novoEmail.trim().lowercase()
+        if (lista.any { it.email == emailLimpo && it.id != conta.id }) return R.string.erro_email_existe
+        lista[indice] = conta.copy(email = emailLimpo)
+        salvarContas(ctx, lista)
+        return null
+    }
+
+    fun alterarSenha(ctx: Context, atual: String, nova: String): Boolean {
+        val lista = lerContas(ctx)
+        val indice = lista.indexOfFirst { it.id == contaAtualId(ctx) }
+        if (indice < 0) return false
+        val conta = lista[indice]
+        if (gerarHash(conta.sal + atual) != conta.hash) return false
+        val sal = UUID.randomUUID().toString()
+        lista[indice] = conta.copy(sal = sal, hash = gerarHash(sal + nova))
+        salvarContas(ctx, lista)
+        return true
+    }
+
+    private fun adotarPostsAntigos(ctx: Context, id: Long) {
+        val lista = posts(ctx)
+        var mudou = false
+        for (i in lista.indices) {
+            if (lista[i].id > 1000 && lista[i].autorId == 0L) {
+                lista[i] = lista[i].copy(autorId = id)
+                mudou = true
+            }
+        }
+        if (mudou) salvarPosts(ctx, lista)
     }
 
     fun modoTema(ctx: Context): Int =
@@ -75,25 +155,6 @@ object Armazenamento {
 
     fun salvarModoTema(ctx: Context, modo: Int) {
         prefs(ctx).edit().putInt("modo_tema", modo).apply()
-    }
-
-    fun temSenha(ctx: Context): Boolean = prefs(ctx).contains("senha_hash")
-
-    fun definirSenha(ctx: Context, senha: String) {
-        val sal = UUID.randomUUID().toString()
-        prefs(ctx).edit()
-            .putString("senha_sal", sal)
-            .putString("senha_hash", gerarHash(sal + senha))
-            .apply()
-    }
-
-    fun conferirSenha(ctx: Context, senha: String): Boolean {
-        val sal = prefs(ctx).getString("senha_sal", null) ?: return false
-        return gerarHash(sal + senha) == prefs(ctx).getString("senha_hash", null)
-    }
-
-    fun removerSenha(ctx: Context) {
-        prefs(ctx).edit().remove("senha_sal").remove("senha_hash").apply()
     }
 
     fun mostrarLimpos(ctx: Context): Boolean = prefs(ctx).getBoolean("mostrar_limpos", true)

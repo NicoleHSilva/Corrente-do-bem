@@ -1,7 +1,8 @@
 package com.example.correntedobem
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import android.util.Patterns
 import android.widget.Button
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -16,17 +17,19 @@ import com.google.android.material.textfield.TextInputLayout
 
 class ConfiguracoesActivity : AppCompatActivity() {
 
-    private lateinit var txtSenhaStatus: TextView
-    private lateinit var btnSenha: Button
-    private lateinit var btnRemoverSenha: Button
+    private lateinit var txtConta: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_configuracoes)
 
-        txtSenhaStatus = findViewById(R.id.txtSenhaStatus)
-        btnSenha = findViewById(R.id.btnSenha)
-        btnRemoverSenha = findViewById(R.id.btnRemoverSenha)
+        txtConta = findViewById(R.id.txtConta)
+        atualizarConta()
+
+        findViewById<Button>(R.id.btnRedefinirEmail).setOnClickListener { dialogoEmail() }
+        findViewById<Button>(R.id.btnAlterarSenha).setOnClickListener { dialogoAlterarSenha() }
+        findViewById<Button>(R.id.btnTrocarConta).setOnClickListener { dialogoTrocarConta() }
+        findViewById<Button>(R.id.btnSairConta).setOnClickListener { confirmarSaida() }
 
         val grupoTema = findViewById<RadioGroup>(R.id.grupoTema)
         when (Armazenamento.modoTema(this)) {
@@ -50,10 +53,6 @@ class ConfiguracoesActivity : AppCompatActivity() {
             Armazenamento.salvarMostrarLimpos(this, marcado)
         }
 
-        btnSenha.setOnClickListener { dialogoNovaSenha() }
-        btnRemoverSenha.setOnClickListener { dialogoRemoverSenha() }
-        atualizarSenha()
-
         findViewById<Button>(R.id.btnRestaurar).setOnClickListener {
             confirmar(R.string.confirmar_restaurar) { Armazenamento.restaurarExemplos(this) }
         }
@@ -71,15 +70,50 @@ class ConfiguracoesActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btnVoltar).setOnClickListener { finish() }
     }
 
-    private fun atualizarSenha() {
-        val tem = Armazenamento.temSenha(this)
-        txtSenhaStatus.text = getString(if (tem) R.string.senha_ativa else R.string.senha_inativa)
-        btnSenha.text = getString(if (tem) R.string.senha_alterar else R.string.senha_definir)
-        btnRemoverSenha.visibility = if (tem) View.VISIBLE else View.GONE
+    private fun atualizarConta() {
+        val conta = Armazenamento.contaAtual(this)
+        txtConta.text = if (conta != null) getString(R.string.conta_conectada, conta.nome, conta.email) else ""
     }
 
-    private fun dialogoNovaSenha() {
-        val tem = Armazenamento.temSenha(this)
+    private fun dialogoEmail() {
+        val conteudo = layoutInflater.inflate(R.layout.dialog_email, null)
+        val layoutEmail = conteudo.findViewById<TextInputLayout>(R.id.layoutEmail)
+        val layoutSenha = conteudo.findViewById<TextInputLayout>(R.id.layoutSenhaEmail)
+        val edtEmail = conteudo.findViewById<TextInputEditText>(R.id.edtEmail)
+        val edtSenha = conteudo.findViewById<TextInputEditText>(R.id.edtSenhaEmail)
+
+        val dialogo = MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.redefinir_email_titulo)
+            .setView(conteudo)
+            .setPositiveButton(R.string.salvar, null)
+            .setNegativeButton(R.string.btn_cancelar, null)
+            .create()
+
+        dialogo.setOnShowListener {
+            dialogo.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                layoutEmail.error = null
+                layoutSenha.error = null
+                val novo = edtEmail.text.toString().trim()
+                if (!Patterns.EMAIL_ADDRESS.matcher(novo).matches()) {
+                    layoutEmail.error = getString(R.string.erro_email_invalido)
+                    return@setOnClickListener
+                }
+                val erro = Armazenamento.redefinirEmail(this, novo, edtSenha.text.toString())
+                if (erro == null) {
+                    atualizarConta()
+                    Toast.makeText(this, R.string.email_atualizado, Toast.LENGTH_SHORT).show()
+                    dialogo.dismiss()
+                } else if (erro == R.string.senha_incorreta) {
+                    layoutSenha.error = getString(erro)
+                } else {
+                    layoutEmail.error = getString(erro)
+                }
+            }
+        }
+        dialogo.show()
+    }
+
+    private fun dialogoAlterarSenha() {
         val conteudo = layoutInflater.inflate(R.layout.dialog_nova_senha, null)
         val layoutAtual = conteudo.findViewById<TextInputLayout>(R.id.layoutAtual)
         val layoutNova = conteudo.findViewById<TextInputLayout>(R.id.layoutNova)
@@ -87,10 +121,9 @@ class ConfiguracoesActivity : AppCompatActivity() {
         val edtAtual = conteudo.findViewById<TextInputEditText>(R.id.edtAtual)
         val edtNova = conteudo.findViewById<TextInputEditText>(R.id.edtNova)
         val edtConfirma = conteudo.findViewById<TextInputEditText>(R.id.edtConfirma)
-        layoutAtual.visibility = if (tem) View.VISIBLE else View.GONE
 
         val dialogo = MaterialAlertDialogBuilder(this)
-            .setTitle(if (tem) R.string.senha_alterar else R.string.senha_definir)
+            .setTitle(R.string.senha_alterar)
             .setView(conteudo)
             .setPositiveButton(R.string.salvar, null)
             .setNegativeButton(R.string.btn_cancelar, null)
@@ -101,11 +134,6 @@ class ConfiguracoesActivity : AppCompatActivity() {
                 layoutAtual.error = null
                 layoutNova.error = null
                 layoutConfirma.error = null
-
-                if (tem && !Armazenamento.conferirSenha(this, edtAtual.text.toString())) {
-                    layoutAtual.error = getString(R.string.senha_incorreta)
-                    return@setOnClickListener
-                }
                 val nova = edtNova.text.toString()
                 if (nova.length < 4) {
                     layoutNova.error = getString(R.string.senha_curta)
@@ -115,41 +143,85 @@ class ConfiguracoesActivity : AppCompatActivity() {
                     layoutConfirma.error = getString(R.string.senha_diferente)
                     return@setOnClickListener
                 }
-                Armazenamento.definirSenha(this, nova)
-                Sessao.desbloqueado = true
-                atualizarSenha()
-                Toast.makeText(this, R.string.senha_salva, Toast.LENGTH_SHORT).show()
-                dialogo.dismiss()
+                if (Armazenamento.alterarSenha(this, edtAtual.text.toString(), nova)) {
+                    Toast.makeText(this, R.string.senha_alterada, Toast.LENGTH_SHORT).show()
+                    dialogo.dismiss()
+                } else {
+                    layoutAtual.error = getString(R.string.senha_incorreta)
+                }
             }
         }
         dialogo.show()
     }
 
-    private fun dialogoRemoverSenha() {
+    private fun dialogoTrocarConta() {
+        val atual = Armazenamento.contaAtualId(this)
+        val outras = Armazenamento.contas(this).filter { it.id != atual }
+        val opcoes = outras.map { "${it.nome} (${it.email})" } + getString(R.string.adicionar_conta)
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.trocar_conta_titulo)
+            .setItems(opcoes.toTypedArray()) { _, indice ->
+                if (indice < outras.size) {
+                    pedirSenhaDaConta(outras[indice])
+                } else {
+                    Armazenamento.sair(this)
+                    abrirLogin(true)
+                }
+            }
+            .setNegativeButton(R.string.btn_cancelar, null)
+            .show()
+    }
+
+    private fun pedirSenhaDaConta(conta: Conta) {
         val conteudo = layoutInflater.inflate(R.layout.dialog_senha, null)
         val layoutSenha = conteudo.findViewById<TextInputLayout>(R.id.layoutSenha)
         val edtSenha = conteudo.findViewById<TextInputEditText>(R.id.edtSenha)
 
         val dialogo = MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.remover_senha_titulo)
+            .setTitle(getString(R.string.senha_da_conta, conta.nome))
             .setView(conteudo)
-            .setPositiveButton(R.string.senha_remover, null)
+            .setPositiveButton(R.string.entrar, null)
             .setNegativeButton(R.string.btn_cancelar, null)
             .create()
 
         dialogo.setOnShowListener {
             dialogo.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                if (Armazenamento.conferirSenha(this, edtSenha.text.toString())) {
-                    Armazenamento.removerSenha(this)
-                    atualizarSenha()
-                    Toast.makeText(this, R.string.senha_removida, Toast.LENGTH_SHORT).show()
+                if (Armazenamento.trocarConta(this, conta.id, edtSenha.text.toString())) {
                     dialogo.dismiss()
+                    abrirPrincipal()
                 } else {
                     layoutSenha.error = getString(R.string.senha_incorreta)
                 }
             }
         }
         dialogo.show()
+    }
+
+    private fun confirmarSaida() {
+        MaterialAlertDialogBuilder(this)
+            .setMessage(R.string.sair_confirmar)
+            .setPositiveButton(R.string.btn_sair_conta) { _, _ ->
+                Armazenamento.sair(this)
+                abrirLogin(false)
+            }
+            .setNegativeButton(R.string.btn_cancelar, null)
+            .show()
+    }
+
+    private fun abrirLogin(criar: Boolean) {
+        startActivity(
+            Intent(this, LoginActivity::class.java)
+                .putExtra("criar", criar)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        )
+    }
+
+    private fun abrirPrincipal() {
+        startActivity(
+            Intent(this, MainActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        )
     }
 
     private fun confirmar(mensagem: Int, acao: () -> Unit) {

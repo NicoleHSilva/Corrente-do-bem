@@ -49,7 +49,8 @@ data class Post(
     val foto: String?,
     val criadoEm: Long,
     val curtidas: Int = 0,
-    val curtiu: Boolean = false
+    val curtiu: Boolean = false,
+    val autorId: Long = 0
 ) {
     fun paraJson(): JSONObject {
         val o = JSONObject()
@@ -59,6 +60,7 @@ data class Post(
             .put("criadoEm", criadoEm)
             .put("curtidas", curtidas)
             .put("curtiu", curtiu)
+            .put("autorId", autorId)
         if (foto != null) o.put("foto", foto)
         return o
     }
@@ -71,7 +73,8 @@ data class Post(
             if (o.has("foto")) o.getString("foto") else null,
             o.getLong("criadoEm"),
             o.getInt("curtidas"),
-            o.getBoolean("curtiu")
+            o.getBoolean("curtiu"),
+            if (o.has("autorId")) o.getLong("autorId") else 0L
         )
     }
 }
@@ -81,3 +84,37 @@ data class Perfil(
     val bio: String = "",
     val foto: String? = null
 )
+
+data class Conta(
+    val id: Long,
+    val nome: String,
+    val email: String,
+    val bio: String,
+    val foto: String?,
+    val sal: String,
+    val hash: String
+) {
+    fun paraJson(): JSONObject {
+        val o = JSONObject()
+            .put("id", id)
+            .put("nome", nome)
+            .put("email", email)
+            .put("bio", bio)
+            .put("sal", sal)
+            .put("hash", hash)
+        if (foto != null) o.put("foto", foto)
+        return o
+    }
+
+    companion object {
+        fun deJson(o: JSONObject) = Conta(
+            o.getLong("id"),
+            o.getString("nome"),
+            o.getString("email"),
+            o.getString("bio"),
+            if (o.has("foto")) o.getString("foto") else null,
+            o.getString("sal"),
+            o.getString("hash")
+        )
+    }
+}

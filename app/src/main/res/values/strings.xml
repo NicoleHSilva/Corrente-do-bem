@@ -147,4 +147,37 @@
     <string name="cfg_sobre">Sobre</string>
     <string name="sobre_versao">Corrente do Bem, versão %1$s</string>
     <string name="sobre_texto">Projeto acadêmico de Sustentabilidade, Unicsul. Licença MIT.</string>
+    <string name="login_subtitulo">Entre ou crie uma conta para participar</string>
+    <string name="login_titulo">Entrar</string>
+    <string name="criar_titulo">Criar conta</string>
+    <string name="hint_email">E-mail</string>
+    <string name="hint_confirmar_senha">Confirmar senha</string>
+    <string name="btn_criar_conta">Criar conta</string>
+    <string name="link_criar">Não tem conta? Criar conta</string>
+    <string name="link_entrar">Já tenho conta</string>
+    <string name="login_invalido">E-mail ou senha incorretos</string>
+    <string name="erro_email_invalido">Digite um e-mail válido</string>
+    <string name="erro_email_existe">Este e-mail já está cadastrado</string>
+    <string name="erro_nome">Informe seu nome</string>
+
+    <string name="cfg_conta">Conta</string>
+    <string name="conta_conectada">Conectado como %1$s\n%2$s</string>
+    <string name="btn_redefinir_email">Redefinir e-mail</string>
+    <string name="btn_trocar_conta">Trocar de conta</string>
+    <string name="btn_sair_conta">Sair da conta</string>
+    <string name="trocar_conta_titulo">Trocar de conta</string>
+    <string name="adicionar_conta">Adicionar outra conta</string>
+    <string name="senha_da_conta">Senha de %1$s</string>
+    <string name="redefinir_email_titulo">Redefinir e-mail</string>
+    <string name="hint_novo_email">Novo e-mail</string>
+    <string name="email_atualizado">E-mail atualizado!</string>
+    <string name="senha_alterada">Senha alterada!</string>
+    <string name="sair_confirmar">Sair da conta?</string>
+
+    <string name="btn_editar_perfil">Editar perfil</string>
+    <string name="editar_perfil_titulo">Editar perfil</string>
+    <string name="perfil_publicacoes">publicações</string>
+    <string name="perfil_curtidas">curtidas</string>
+    <string name="perfil_publicacoes_titulo">Publicações</string>
+    <string name="sem_publicacoes">Nenhuma publicação até o momento</string>
 </resources>

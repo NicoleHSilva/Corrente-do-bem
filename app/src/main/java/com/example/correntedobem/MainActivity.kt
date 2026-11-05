@@ -1,19 +1,22 @@
 package com.example.correntedobem
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Armazenamento.contaAtual(this) == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+
         setContentView(R.layout.activity_main)
 
         val menu = findViewById<BottomNavigationView>(R.id.bottomNav)
@@ -32,38 +35,5 @@ class MainActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             menu.selectedItemId = R.id.nav_feed
         }
-
-        if (Armazenamento.temSenha(this) && !Sessao.desbloqueado) {
-            val raiz = findViewById<View>(android.R.id.content)
-            raiz.visibility = View.INVISIBLE
-            pedirSenha(raiz)
-        }
-    }
-
-    private fun pedirSenha(raiz: View) {
-        val conteudo = layoutInflater.inflate(R.layout.dialog_senha, null)
-        val layoutSenha = conteudo.findViewById<TextInputLayout>(R.id.layoutSenha)
-        val edtSenha = conteudo.findViewById<TextInputEditText>(R.id.edtSenha)
-
-        val dialogo = MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.senha_entrar_titulo)
-            .setView(conteudo)
-            .setCancelable(false)
-            .setPositiveButton(R.string.entrar, null)
-            .setNegativeButton(R.string.sair) { _, _ -> finish() }
-            .create()
-
-        dialogo.setOnShowListener {
-            dialogo.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                if (Armazenamento.conferirSenha(this, edtSenha.text.toString())) {
-                    Sessao.desbloqueado = true
-                    raiz.visibility = View.VISIBLE
-                    dialogo.dismiss()
-                } else {
-                    layoutSenha.error = getString(R.string.senha_incorreta)
-                }
-            }
-        }
-        dialogo.show()
     }
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="1dp">
+
+    <ImageView
+        android:id="@+id/imgMiniatura"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/ciano_claro"
+        android:contentDescription="@string/desc_foto_post"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtMiniatura"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="5"
+        android:padding="8dp"
+        android:textColor="@color/texto_principal"
+        android:textSize="11sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/imgMiniatura"
+        app:layout_constraintEnd_toEndOf="@id/imgMiniatura"
+        app:layout_constraintStart_toStartOf="@id/imgMiniatura"
+        app:layout_constraintTop_toTopOf="@id/imgMiniatura" />
+</androidx.constraintlayout.widget.ConstraintLayout>

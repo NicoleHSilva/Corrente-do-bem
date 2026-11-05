@@ -102,32 +102,35 @@
                         style="@style/TituloCard"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/cfg_seguranca" />
+                        android:text="@string/cfg_conta" />
 
                     <TextView
-                        android:id="@+id/txtSenhaStatus"
+                        android:id="@+id/txtConta"
                         style="@style/TextoCorpo"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp" />
 
                     <Button
-                        android:id="@+id/btnSenha"
-                        style="@style/BotaoEco"
-                        android:layout_marginTop="12dp" />
+                        android:id="@+id/btnRedefinirEmail"
+                        style="@style/BotaoVoltar"
+                        android:layout_marginTop="12dp"
+                        android:text="@string/btn_redefinir_email" />
 
                     <Button
-                        android:id="@+id/btnRemoverSenha"
+                        android:id="@+id/btnAlterarSenha"
                         style="@style/BotaoVoltar"
-                        android:text="@string/senha_remover" />
+                        android:text="@string/senha_alterar" />
 
-                    <TextView
-                        style="@style/TextoCorpo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="@string/senha_aviso"
-                        android:textSize="13sp" />
+                    <Button
+                        android:id="@+id/btnTrocarConta"
+                        style="@style/BotaoVoltar"
+                        android:text="@string/btn_trocar_conta" />
+
+                    <Button
+                        android:id="@+id/btnSairConta"
+                        style="@style/BotaoEco"
+                        android:text="@string/btn_sair_conta" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
